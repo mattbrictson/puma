@@ -26,6 +26,8 @@ module Process
       null_out = File.open "/dev/null", "w"
       STDOUT.reopen null_out
       STDERR.reopen null_out
+      Events::DEFAULT.stdout.reopen null_out
+      Events::DEFAULT.stderr.reopen null_out
     end
 
     0
