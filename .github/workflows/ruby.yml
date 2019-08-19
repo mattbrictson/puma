@@ -15,12 +15,12 @@ jobs:
     strategy:
       matrix:
         ruby_version: [2.4.x,2.5.x,2.6.x] # 2.2 is not currently offered, 2.3 not on windows
-        os: [ubuntu-latest, windows-latest] # MacOS is bugged r/n, see: https://github.com/actions/setup-ruby/issues/9
+        os: [ubuntu-latest] # MacOS is bugged r/n, see: https://github.com/actions/setup-ruby/issues/9, windows doesnt want to run bundle install for some reason
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
     - name: Set up Ruby
-      uses: actions/setup-ruby@v1
+      uses: actions/setup-ruby@master
       with:
         ruby-version: ${{ matrix.ruby_version }}
     - name: Install dependencies
