@@ -1,0 +1,36 @@
+name: Puma
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  test:
+    name: Test on node ${{ matrix.ruby_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        ruby_version: [2.3.x,2.4.x,2.5.x,2.6.x] # 2.2 is not currently offered
+        os: [ubuntu-latest, windows-latest] # MacOS is bugged r/n, see: https://github.com/actions/setup-ruby/issues/9
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+    - name: Compiles extensions
+      run: |
+        bundle exec rake compile
+    - name: Build and test with Rake
+      env:
+        CI: true
+        TESTOPTS: -v
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        bundle exec rake
